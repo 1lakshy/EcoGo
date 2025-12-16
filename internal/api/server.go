@@ -5,6 +5,7 @@ import (
 	"go-ecommerce-api/configs"
 	"go-ecommerce-api/internal/api/rest"
 	"go-ecommerce-api/internal/api/rest/handler"
+	"go-ecommerce-api/internal/domain"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,6 +28,9 @@ func StartServer(config configs.AppConfig) {
 	log.Println("Database Connected")
 	log.Print(db)
 	app := fiber.New()
+
+	// run auto migrate
+	db.AutoMigrate(&domain.User{})
 
 	rh := &rest.RestHandler{
 		App:app,
