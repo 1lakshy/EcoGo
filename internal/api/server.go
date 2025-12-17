@@ -6,6 +6,7 @@ import (
 	"go-ecommerce-api/internal/api/rest"
 	"go-ecommerce-api/internal/api/rest/handler"
 	"go-ecommerce-api/internal/domain"
+	"go-ecommerce-api/internal/helper"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -31,10 +32,12 @@ func StartServer(config configs.AppConfig) {
 
 	// run auto migrate
 	db.AutoMigrate(&domain.User{})
+	auth := helper.SetupAuth(config.AppSecret)
 
 	rh := &rest.RestHandler{
 		App:app,
 		DB: db,
+		Auth: auth,
 	}
 
 	setupRoutes(rh)
